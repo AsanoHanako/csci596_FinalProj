@@ -126,7 +126,8 @@ void makeAtoms() {
     glPushMatrix();
 //    glTranslatef(atoms[i].crd[0],atoms[i].crd[1],atoms[i].crd[2]);
 	glTranslatef(r[i][0],r[i][1],r[i][2]);
-    glColor3f(rval,gval,bval);
+//    glColor3f(rval,gval,bval);
+	glColor3f(rColor[i][0],rColor[i][1],rColor[i][2]); /* Color computed based on atom kinetic energy */
     glCallList(sphereid);
     glPopMatrix();
   }

@@ -63,6 +63,9 @@ void HalfKick();
 void ApplyBoundaryCond();
 void EvalProps();
 
+void ComputeKenergy();
+void KineticColoring();
+
 /* Input parameters (read from an input file in this order) *******************/
 
 int InitUcell[3];   /* Number of unit cells */
@@ -90,6 +93,10 @@ double potEnergy;     /* Potential energy */
 double totEnergy;     /* Total energy */
 double temperature;   /* Current temperature */
 int stepCount;        /* Current time step */
+
+double rke[NMAX];	  /* Kinetic energy of each atom */
+float rColor[NMAX][3]; /* RGB colors of each atom */
+
 /******************************************************************************/
 
 /*******************************************************************************
@@ -283,3 +290,27 @@ void EvalProps() {
 	stepCount*DeltaT,temperature,potEnergy,totEnergy);
 }
 
+void ComputeKenergy() {
+	double vv;
+	int n,k;
+	for (n=0; n<nAtom; n++) {
+		rke[n] = 0.0;
+		vv = 0.0;
+		for (k=0; k<3; k++) {
+			vv = vv + rv[n][k]*rv[n][k];
+		}
+		rke[n] = vv;
+	}
+}
+	
+void KineticColoring() {
+	float rval, gval, bval;
+	for (int i=0; i < nAtom; i++) {
+		rval = (float) (rke[i] / rke[i] + 1);
+		bval = 1.0f - rval;
+		gval = 0.0f;
+		rColor[i][0] = rval;
+		rColor[i][1] = gval;
+		rColor[i][2] = bval;
+	}
+}
